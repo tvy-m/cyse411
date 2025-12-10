@@ -7,13 +7,15 @@ const { body, validationResult } = require('express-validator');
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { setHeaders: (res) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+}}));
 app.use((req, res, next) => {
   res.setHeader("X-Frame-Options", "DENY");
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.removeHeader("X-Powered-By");
-  res.setHeader("Content-Security-Policy", "default-src 'self'");
-  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  res.removeHeader("X-Powered-By", "");
+  res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; frame-ancestors 'none'");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=(), interest-cohort=()");
   next();
 });
 
