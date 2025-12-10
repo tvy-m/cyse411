@@ -10,32 +10,27 @@ app.use(express.json());
 
 app.disable("x-powered-by");
 
-app.use((req, res, next) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "DENY");
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader(
+      "Content-Security-Policy",
+      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; frame-src 'self'"
+    );
+    res.setHeader(
+      "Permissions-Policy",
+      "geolocation=(), microphone=(), camera=(), fullscreen=(), payment=(), sync-xhr=(), interest-cohort=()"
+    );
+    res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+    res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+  }
+}));
 
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; frame-src 'self'"
-  );
-
-  res.setHeader(
-    "Permissions-Policy",
-    "geolocation=(), microphone=(), camera=(), fullscreen=(), payment=(), sync-xhr=(), interest-cohort=()"
-  );
-
-  res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-
-  next();
-});
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 const BASE_DIR = path.resolve(__dirname, 'files');
 if (!fs.existsSync(BASE_DIR)) fs.mkdirSync(BASE_DIR, { recursive: true });
