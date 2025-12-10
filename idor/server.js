@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.disable("x-powered-by");
+
 app.use(express.json());
 
 // Fake "database"
@@ -54,7 +56,8 @@ app.get("/orders/:id", (req, res) => {
 
 // Health check
 app.get("/", (req, res) => {
-  res.json({ message: "Access Control Tutorial API", currentUser: req.user });
+  res.set("Cache-Control", "public, max-age=60"); // cacheable for 60s
+  res.status(200).json({ message: "Access Control Tutorial API", currentUser: req.user });
 });
 
 // Start server
