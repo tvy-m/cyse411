@@ -15,12 +15,12 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Install lab dependencies
-        working-directory: fastbank_insecure_classwork/backend
+        working-directory: canonicalization-example
         run: |
           npm install
 
       - name: Start vulnerable app
-        working-directory: fastbank_insecure_classwork/backend
+        working-directory: canonicalization-example
         run: |
           npm start &
           # wait for the server to boot
