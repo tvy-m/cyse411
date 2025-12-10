@@ -15,12 +15,12 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Install lab dependencies
-        working-directory: idor
+        working-directory: fastbank-auth-lab/src
         run: |
           npm install
 
       - name: Start vulnerable app
-        working-directory: idor
+        working-directory: fastbank-auth-lab/src
         run: |
           npm start &
           # wait for the server to boot
