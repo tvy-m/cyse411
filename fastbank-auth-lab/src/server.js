@@ -1,3 +1,4 @@
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -6,6 +7,30 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
 const app = express();
+
+app.disable("x-powered-by");
+
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; frame-ancestors 'self'; form-action 'self'"
+  );
+
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=()"
+  );
+
+  next();
+});
+
+app.use("/api", (req, res, next) => {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  next();
+});
+
 const PORT = 3001;
 
 app.use(bodyParser.urlencoded({ extended: false }));
