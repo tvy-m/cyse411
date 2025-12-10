@@ -13,10 +13,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders: (res) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("X-Frame-Options", "DENY");
-    res.setHeader(
-      "Content-Security-Policy",
-      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
-    );
+    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; frame-src 'self'");
     res.setHeader(
       "Permissions-Policy",
       "geolocation=(), microphone=(), camera=(), fullscreen=(), payment=(), sync-xhr=(), interest-cohort=()"
@@ -26,7 +23,6 @@ app.use(express.static(path.join(__dirname, 'public'), {
     res.setHeader("Expires", "0");
   }
 }));
-
 
 const BASE_DIR = path.resolve(__dirname, 'files');
 if (!fs.existsSync(BASE_DIR)) fs.mkdirSync(BASE_DIR, { recursive: true });
